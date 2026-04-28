@@ -177,6 +177,11 @@ body{
   background:rgba(148,163,184,0.5);
   margin:6px auto 4px;cursor:ns-resize;
   touch-action:none;
+  position:relative;
+}
+.stat-handle::before{
+  content:'';position:absolute;
+  top:-14px;bottom:-14px;left:-40px;right:-40px;
 }
 
 /* ═══ CHAR AREA ═══ */
@@ -367,10 +372,11 @@ body{
   display:flex;align-items:center;justify-content:center;
   transition:background 0.15s;
 }
-.prog-icon-btn:active{background:rgba(255,255,255,0.08)}
-.prog-icon-btn.active{background:rgba(255,255,255,0.14)}
-.prog-icon-btn svg{stroke:var(--label-normal);opacity:0.9}
-.prog-icon-btn img{opacity:0.95}
+.prog-icon-btn{opacity:0.7;transition:opacity 0.2s}
+@media (hover:hover){.prog-icon-btn:hover{opacity:1}}
+.prog-icon-btn:active{opacity:1}
+.prog-icon-btn.active{opacity:1}
+.prog-icon-btn svg{stroke:var(--label-normal)}
 /* ═══ INPUT BAR (2-row) ═══ */
 .input-wrap{
   margin-top:8px;
@@ -906,25 +912,6 @@ body.intro-mode .stat-panel{display:none !important}
   transition:opacity 0.2s;
 }
 .name-row-wrap.no-line::after{opacity:0}
-.dlg-prev-btn{
-  margin-left:auto;
-  background:none;border:none;cursor:pointer;
-  padding:6px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity 0.2s;
-  position:relative;z-index:3;
-}
-.dlg-prev-btn:active{opacity:0.7}
-.dlg-prev-btn:disabled{opacity:0.3;pointer-events:none}
-.dlg-edit-btn{
-  margin-left:6px;
-  background:none;border:none;cursor:pointer;
-  padding:6px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity 0.2s;
-  position:relative;z-index:3;
-}
-.dlg-edit-btn:active{opacity:0.7}
 
 /* ═══ EDIT MODAL ═══ */
 .edit-modal{
@@ -1179,6 +1166,7 @@ body.intro-mode .stat-panel{display:none !important}
       </div>
     </div>
     <div class="header-right">
+      <button class="icon-btn" id="chatLogBtn" onclick="showChatLog()" title="대화 로그"><img src="./images/icon/history.svg?v=2" alt="로그" style="width:24px;height:24px"></button>
       <button class="icon-btn" id="menuToggleBtn" onclick="openSettings()" title="설정"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
     </div>
   </div>
@@ -1249,7 +1237,6 @@ body.intro-mode .stat-panel{display:none !important}
         <span class="loading-name">잠시 기다려주세요....</span>
       </div>
       <div class="progress-icons">
-        <button class="prog-icon-btn" id="chatLogBtn" onclick="showChatLog()" title="대화 로그"><img src="./images/icon/history.svg?v=2" alt="로그" style="width:24px;height:24px"></button>
         <button class="prog-icon-btn" id="statToggleBtn" onclick="toggleStats()" title="스탯 토글"><img id="statToggleIcon" src="./images/icon/chat-bubble.svg?v=7" alt="스탯" style="width:22px;height:22px"></button>
         <button class="prog-icon-btn" id="prevTurnBtn" onclick="confirmUndoTurn()" title="되돌리기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 010 11H11"/></svg></button>
         <button class="prog-icon-btn" id="dlgEditBtn" onclick="showEditModal()" title="대사 수정"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.15 1.85C10.95 1.05 12.25 1.05 13.05 1.85L14.15 2.95C14.95 3.75 14.95 5.05 14.15 5.85L5.55 14.45C5.35 14.65 5.1 14.75 4.85 14.75H2.25C1.75 14.75 1.35 14.35 1.35 13.85V11.25C1.35 11 1.45 10.75 1.65 10.55L10.15 1.85ZM11.05 2.95C10.75 2.65 10.45 2.65 10.15 2.95L8.95 4.15L11.85 7.05L13.05 5.85C13.35 5.55 13.35 5.25 13.05 4.95L11.05 2.95ZM10.85 8.05L7.95 5.15L2.75 10.35V13.35H5.55L10.85 8.05Z" fill="currentColor" fill-opacity="0.85"/></svg></button>
