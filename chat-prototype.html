@@ -915,22 +915,21 @@ body.intro-mode .stat-panel{display:none !important}
 }
 .name-row-wrap.no-line::after{opacity:0}
 
-/* ═══ EDIT MODAL (popup) ═══ */
+/* ═══ EDIT MODAL (popup, mirai spec) ═══ */
 .edit-modal{
   position:fixed;left:50%;top:50%;
   transform:translate(-50%,-50%) scale(0.95);
   z-index:500;
-  width:calc(100% - 40px);max-width:320px;
+  width:calc(100% - 40px);max-width:400px;min-width:320px;max-height:760px;
   background:var(--bg-elevated);
-  border-radius:16px;
+  border-radius:12px;
   padding:20px;
   box-shadow:0 12px 40px rgba(0,0,0,0.55);
   opacity:0;pointer-events:none;
   transition:opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.4,0,0.2,1);
   display:flex;flex-direction:column;align-items:stretch;
-  max-height:80vh;overflow-y:auto;
+  overflow-y:auto;
 }
-@media (min-width:431px){.edit-modal{max-width:400px}}
 .edit-modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 .edit-modal > *{width:100%}
 .edit-modal .ds-handle{display:none}
