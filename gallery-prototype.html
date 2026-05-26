@@ -240,6 +240,24 @@ body{
 .gallery-item .tier-badge.cutscene{
   background:rgba(250,115,227,0.85);
 }
+/* 새로 추가된 이미지 표시 — 자연스러운 시안 점 (열면 사라짐) */
+.gallery-item.is-new{
+  box-shadow:0 0 0 1.5px rgba(46,196,240,0.45);
+}
+.gallery-item .new-badge{
+  position:absolute;top:7px;left:7px;z-index:2;
+  width:9px;height:9px;border-radius:50%;
+  background:#2EC4F0;
+  box-shadow:0 1px 3px rgba(0,0,0,0.4), 0 0 7px rgba(46,196,240,0.85);
+  animation:newPulse 1.8s ease-in-out infinite;
+}
+@keyframes newPulse{
+  0%,100%{transform:scale(1);box-shadow:0 1px 3px rgba(0,0,0,0.4), 0 0 7px rgba(46,196,240,0.65)}
+  50%{transform:scale(1.18);box-shadow:0 1px 3px rgba(0,0,0,0.4), 0 0 11px rgba(46,196,240,1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .gallery-item .new-badge{animation:none}
+}
 
 /* ═══ UNLOCK MODAL ═══ */
 .unlock-backdrop{
@@ -445,7 +463,8 @@ function makeItems(){
         id: id++,
         cat,
         img: SAMPLE_IMAGES[id % SAMPLE_IMAGES.length],
-        unlocked: id === 1, // 첫 1개만 미리 해금
+        unlocked: id <= 6, // 데모: 일부 해금
+        isNew: id === 3 || id === 4, // 대화 중 오가닉하게 얻은 새 이미지
       });
     }
   });
@@ -477,10 +496,12 @@ function render() {
           ${price}
         </div>
       </div>`;
+    const newHtml = (it.isNew && it.unlocked) ? '<span class="new-badge"></span>' : '';
     return `
-      <div class="gallery-item ${it.unlocked ? '' : 'locked'}" data-id="${it.id}" onclick="onItemClick(${it.id})">
+      <div class="gallery-item ${it.unlocked ? '' : 'locked'}${(it.isNew && it.unlocked) ? ' is-new' : ''}" data-id="${it.id}" onclick="onItemClick(${it.id})">
         <img src="${it.img}" alt="" onerror="this.style.background='var(--fill-normal)'">
         <span class="tier-badge ${it.cat}">${TIER_LABELS[it.cat]}</span>
+        ${newHtml}
         ${lockHtml}
       </div>
     `;
@@ -492,6 +513,15 @@ function onItemClick(id) {
   const item = ITEMS.find(i => i.id === id);
   if (!item) return;
   if (item.unlocked) {
+    if (item.isNew) {
+      item.isNew = false;
+      const el = document.querySelector(`.gallery-item[data-id="${id}"]`);
+      if (el) {
+        el.classList.remove('is-new');
+        const dot = el.querySelector('.new-badge');
+        if (dot) dot.remove();
+      }
+    }
     openViewer(id);
   } else {
     askUnlock(id);
